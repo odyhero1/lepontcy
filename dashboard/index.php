@@ -1,6 +1,8 @@
 <!doctype html>
-<?php include 'db.php';
-$getAllProjects=mysqli_query($con,"SELECT * from requests ORDER BY dateAdded desc,percentage desc");
+<?php
+ include '../db.php';
+ include '../auth.php';
+$getAllProjects=mysqli_query($con,"SELECT * from requests where userID='$userID' ORDER BY dateAdded desc,percentage desc");
 
 
 ?>
@@ -12,26 +14,26 @@ $getAllProjects=mysqli_query($con,"SELECT * from requests ORDER BY dateAdded des
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="icon" href="img/favicon.png" type="image/png">
+	<link rel="icon" href="../img/favicon.png" type="image/png">
 	<title>Help Lebanon Today</title>
 	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="css/bootstrap.css">
-	<link rel="stylesheet" href="vendors/linericon/style.css">
-	<link rel="stylesheet" href="css/font-awesome.min.css">
-	<link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
-	<link rel="stylesheet" href="vendors/lightbox/simpleLightbox.css">
-	<link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
-	<link rel="stylesheet" href="vendors/animate-css/animate.css">
-	<link rel="stylesheet" href="vendors/jquery-ui/jquery-ui.css">
+	<link rel="stylesheet" href="../css/bootstrap.css">
+	<link rel="stylesheet" href="../vendors/linericon/style.css">
+	<link rel="stylesheet" href="../css/font-awesome.min.css">
+	<link rel="stylesheet" href="../vendors/owl-carousel/owl.carousel.min.css">
+	<link rel="stylesheet" href="../vendors/lightbox/simpleLightbox.css">
+	<link rel="stylesheet" href="../vendors/nice-select/css/nice-select.css">
+	<link rel="stylesheet" href="../vendors/animate-css/animate.css">
+	<link rel="stylesheet" href="../vendors/jquery-ui/jquery-ui.css">
 	<!-- main css -->
-	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/responsive.css">
+	<link rel="stylesheet" href="../css/style.css">
+	<link rel="stylesheet" href="../css/responsive.css">
 </head>
 
 <body>
 
 	<!--================Header Menu Area =================-->
-	<?php include 'navbar.php';?>
+	<?php include '../sign-in/navbar.php';?>
 
 	<!--================Header Menu Area =================-->
 
@@ -42,26 +44,32 @@ $getAllProjects=mysqli_query($con,"SELECT * from requests ORDER BY dateAdded des
 			<div class="container">
 				<div class="banner_content text-center">
 					<?php if(isset($_SESSION['loggedIn']) and $_SESSION['loggedIn']==true){
-						echo '<h2>Hello '.$_SESSION["userDetails"]["name"].', here are some causes</h2>';
+						echo '<h2>My causes</h2>';
+            echo '<h4 style="color:white">Hello '.$_SESSION["userDetails"]["name"].'</h4>';
 					}else {
 						echo '<h2>Hello, here are some causes</h2>';
 
 					}
 					?>
 					<div class="page_link">
-						<a href="index.html">Home</a>
-						<a href="causes.html">Causes</a>
+						<a href="../index.html">Home</a>
+						<a>Causes</a>
 					</div>
 				</div>
 			</div>
+
 		</div>
 	</section>
 	<!--================End Banner Area =================-->
 
 	<!--================ Start Our Major Cause section =================-->
 	<section class="our_major_cause section_gap_custom">
+    <a class='main_btn2' style="float:right;margin-right:5%;" href='createCause.php'>Create Cause</a>
+
 		<div class="container">
+
 			<div class="row">
+
 				<?php
 				while($rows=mysqli_fetch_assoc($getAllProjects)){
 					$img=$rows['thumbnail'];
@@ -71,7 +79,7 @@ $getAllProjects=mysqli_query($con,"SELECT * from requests ORDER BY dateAdded des
 					$smallDescription=$rows['smallDescription'];
 					$id=$rows['id'];
 					$dateAdded=date('j-M-y',strtotime($rows['dateAdded']));
-					$getAllDonations=mysqli_query($con,"SELECT SUM(donationAmount) from donations where causeID='$id' ");
+					$getAllDonations=mysqli_query($con,"SELECT SUM(donationAmount) from donations where causeID='$id'  ");
 					$donationDetails=mysqli_fetch_assoc($getAllDonations);
 					$totalRaised=$donationDetails['SUM(donationAmount)'];
 					if($totalRaised==""){
@@ -98,7 +106,7 @@ $getAllProjects=mysqli_query($con,"SELECT * from requests ORDER BY dateAdded des
 								<h4 class="card-title">'.$title.'</h4>
 								<p class="card-text">'.$smallDescription.'
 								</p>
-								<a href="causeDetails.php?id='.$id.'" class="main_btn2">View More</a>
+								<a href="editCauseDetails.php?id='.$id.'" class="main_btn2">Edit</a>
 							</div>
 							<p>
 							Date Added: '.$dateAdded.'
@@ -116,15 +124,13 @@ $getAllProjects=mysqli_query($con,"SELECT * from requests ORDER BY dateAdded des
 
 
 
-
-
 			</div>
 		</div>
 	</section>
 	<!--================ Ens Our Major Cause section =================-->
 
 	<!--================ Start Footer Area  =================-->
-	<?php include 'footer.php';?>
+  <?php include '../footer.php';?>
 
 	<!--================ End Footer Area  =================-->
 
@@ -132,20 +138,20 @@ $getAllProjects=mysqli_query($con,"SELECT * from requests ORDER BY dateAdded des
 
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="js/jquery-3.2.1.min.js"></script>
-	<script src="js/popper.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<!-- <script src="vendors/lightbox/simpleLightbox.min.js"></script> -->
-	<script src="vendors/nice-select/js/jquery.nice-select.min.js"></script>
-	<!-- <script src="vendors/isotope/imagesloaded.pkgd.min.js"></script> -->
-	<script src="vendors/isotope/isotope-min.js"></script>
-	<script src="vendors/owl-carousel/owl.carousel.min.js"></script>
-	<script src="js/jquery.ajaxchimp.min.js"></script>
-	<!-- <script src="vendors/counter-up/jquery.waypoints.min.js"></script> -->
-	<!-- <script src="vendors/flipclock/timer.js"></script> -->
-	<!-- <script src="vendors/counter-up/jquery.counterup.js"></script> -->
-	<script src="js/mail-script.js"></script>
-	<script src="js/custom.js"></script>
+	<script src="../js/jquery-3.2.1.min.js"></script>
+	<script src="../js/popper.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<!-- <script src="../vendors/lightbox/simpleLightbox.min.js"></script> -->
+	<script src="../vendors/nice-select/js/jquery.nice-select.min.js"></script>
+	<!-- <script src="../vendors/isotope/imagesloaded.pkgd.min.js"></script> -->
+	<script src="../vendors/isotope/isotope-min.js"></script>
+	<script src="../vendors/owl-carousel/owl.carousel.min.js"></script>
+	<script src="../js/jquery.ajaxchimp.min.js"></script>
+	<!-- <script src="../vendors/counter-up/jquery.waypoints.min.js"></script> -->
+	<!-- <script src="../vendors/flipclock/timer.js"></script> -->
+	<!-- <script src="../vendors/counter-up/jquery.counterup.js"></script> -->
+	<script src="../js/mail-script.js"></script>
+	<script src="../js/custom.js"></script>
 </body>
 
 </html>

@@ -1,10 +1,25 @@
-<!doctype html>
-<?php include 'db.php';
-$getAllProjects=mysqli_query($con,"SELECT * from requests ORDER BY dateAdded desc,percentage desc");
-
+<?php
+include 'db.php';
+if(isset($_GET['id'])){
+  $id=$_GET['id'];
+}else {
+  header('location: causes.php');
+}
+$getProjectDetails=mysqli_query($con,"SELECT * from requests where id='$id'");
+if(mysqli_num_rows($getProjectDetails) ==0){
+  header('location: causes.php');
+}
+$projectDetails=mysqli_fetch_assoc($getProjectDetails);
+$img=$projectDetails['thumbnail'];
+$title=$projectDetails['title'];
+$largeDescription=nl2br($projectDetails['largeDescription']);
+$percentage=$projectDetails['percentage'];
+$goal=$projectDetails['goal'];
+$dateAdded=date('j-M-y',strtotime($projectDetails['dateAdded']));
+$location=$projectDetails['location'];
 
 ?>
-
+<!doctype html>
 
 <html lang="en">
 
@@ -32,7 +47,6 @@ $getAllProjects=mysqli_query($con,"SELECT * from requests ORDER BY dateAdded des
 
 	<!--================Header Menu Area =================-->
 	<?php include 'navbar.php';?>
-
 	<!--================Header Menu Area =================-->
 
 	<!--================ Banner Area =================-->
@@ -41,16 +55,11 @@ $getAllProjects=mysqli_query($con,"SELECT * from requests ORDER BY dateAdded des
 			<div class="overlay"></div>
 			<div class="container">
 				<div class="banner_content text-center">
-					<?php if(isset($_SESSION['loggedIn']) and $_SESSION['loggedIn']==true){
-						echo '<h2>Hello '.$_SESSION["userDetails"]["name"].', here are some causes</h2>';
-					}else {
-						echo '<h2>Hello, here are some causes</h2>';
-
-					}
-					?>
+					<h2>Cause Details</h2>
 					<div class="page_link">
-						<a href="index.html">Home</a>
-						<a href="causes.html">Causes</a>
+						<a href="index.php">Home</a>
+						<a href="causes.php">Causes</a>
+						<a>Cause Details</a>
 					</div>
 				</div>
 			</div>
@@ -58,73 +67,64 @@ $getAllProjects=mysqli_query($con,"SELECT * from requests ORDER BY dateAdded des
 	</section>
 	<!--================End Banner Area =================-->
 
-	<!--================ Start Our Major Cause section =================-->
-	<section class="our_major_cause section_gap_custom">
+
+	<!--================ Start Recent Event Area =================-->
+  <?php
+
+
+  echo '
+	<section class="event_details section_gap">
 		<div class="container">
 			<div class="row">
-				<?php
-				while($rows=mysqli_fetch_assoc($getAllProjects)){
-					$img=$rows['thumbnail'];
-					$percentage=$rows['percentage'];
-					$goal=$rows['goal'];
-					$title=$rows['title'];
-					$smallDescription=$rows['smallDescription'];
-					$id=$rows['id'];
-					$dateAdded=date('j-M-y',strtotime($rows['dateAdded']));
-					$getAllDonations=mysqli_query($con,"SELECT SUM(donationAmount) from donations where causeID='$id' ");
-					$donationDetails=mysqli_fetch_assoc($getAllDonations);
-					$totalRaised=$donationDetails['SUM(donationAmount)'];
-					if($totalRaised==""){
-						$totalRaised=0;
-					}
+				<div class="col-lg-8 offset-lg-2">
+					<img src="'.$img.'" alt="" class="img-fluid">
+          <div class="progress">
+
+            <div class="progress-bar" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentage.'%;">
+            </div>
+				</div>
 
 
-				echo '
-				<div class="col-lg-4">
-					<div class="card">
-						<div class="card-body">
-							<figure>
-								<img class="card-img-top img-fluid sheeshImg" src="'.$img.'" alt="'.$title.'">
-							</figure>
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" aria-valuenow="'.$percentage.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentage.'%;">
-									<span>Funded '.$percentage.'%</span>
+         </div>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2">
+					<div class="event_content">
+						<div class="row">
+							<div class="col-lg-4">
+								<div class="left_content">
+									<p>
+										<i class="lnr lnr-calendar-full"></i>
+										'.$dateAdded.'
+									</p>
+									<p>
+										<i class="lnr lnr-location"></i>
+										'.$location.'
+									</p>
+
 								</div>
 							</div>
-							<div class="card_inner_body">
-								<div class="card-body-top">
-									<span>Raised: €'.$totalRaised.'</span> / €'.$goal.'
+							<div class="col-lg-8">
+								<div class="right_content">
+									<h3>'.$title.'</h3>
+									<p>'.$largeDescription.'</p>
 								</div>
-								<h4 class="card-title">'.$title.'</h4>
-								<p class="card-text">'.$smallDescription.'
-								</p>
-								<a href="causeDetails.php?id='.$id.'" class="main_btn2">View More</a>
 							</div>
-							<p>
-							Date Added: '.$dateAdded.'
-							</p>
+              <a href="donation.php?causeID='.$id.'" class="genric-btn primary radius">Donate</a>
+
 						</div>
 					</div>
-				</div>';
-
-			}
-
-				?>
-
-
-
-
-
-
-
-
+				</div>
 			</div>
 		</div>
 	</section>
-	<!--================ Ens Our Major Cause section =================-->
+  ';
+  ?>
+	<!--================ End Recent Event Area =================-->
 
 	<!--================ Start Footer Area  =================-->
-	<?php include 'footer.php';?>
+  <?php include 'footer.php';?>
 
 	<!--================ End Footer Area  =================-->
 

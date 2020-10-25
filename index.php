@@ -1,3 +1,10 @@
+<?php
+include 'db.php';
+$getTopDonnors=mysqli_query($con,"SELECT * from users ORDER BY totalDonated desc limit 20");
+$getAllProjects=mysqli_query($con,"SELECT * from requests ORDER BY dateAdded desc,percentage desc");
+
+
+ ?>
 <!doctype html>
 <html lang="en">
 
@@ -6,7 +13,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" href="img/favicon.png" type="image/png">
-	<title>Kare Charity</title>
+	<title>Help Lebanon Today</title>
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="vendors/linericon/style.css">
@@ -25,73 +32,7 @@
 
 
 	<!--================Header Menu Area =================-->
-	<header class="header_area">
-		<div class="main_menu">
-			<nav class="navbar navbar-expand-lg navbar-light">
-				<div class="container">
-					<!-- Brand and toggle get grouped for better mobile display -->
-					<a class="navbar-brand logo_h" href="index.html">
-						<img src="img/logo.png" alt="">
-					</a>
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-					 aria-expanded="false" aria-label="Toggle navigation">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<!-- Collect the nav links, forms, and other content for toggling -->
-					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
-						<div class="row ml-0 w-100">
-							<div class="col-lg-12 pr-0">
-								<ul class="nav navbar-nav center_nav pull-right">
-									<li class="nav-item active">
-										<a class="nav-link" href="index.html">home</a>
-									</li>
-									<li class="nav-item ">
-										<a class="nav-link" href="causes.html">causes</a>
-									</li>
-									<li class="nav-item ">
-										<a class="nav-link" href="events.html">events</a>
-									</li>
-									<li class="nav-item submenu dropdown">
-										<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages</a>
-										<ul class="dropdown-menu">
-											<li class="nav-item">
-												<a class="nav-link" href="about.html">About</a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="donation.html">donation</a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="elements.html">Elements</a>
-											</li>
-										</ul>
-									</li>
-									<li class="nav-item submenu dropdown">
-										<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Blog</a>
-										<ul class="dropdown-menu">
-											<li class="nav-item">
-												<a class="nav-link" href="blog.html">Blog</a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="single-blog.html">Blog Details</a>
-											</li>
-										</ul>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link" href="contact.html">Contact</a>
-									</li>
-									<li class="nav-item">
-										<a class="main_btn" href="donation.html">donate now</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</nav>
-		</div>
-	</header>
+<?php include 'navbar.php';?>
 	<!--================Header Menu Area =================-->
 
 	<!--================ Home Banner Area =================-->
@@ -102,10 +43,9 @@
 				<div class="banner_content row">
 					<div class="offset-lg-2 col-lg-8">
 						<img class="img-fluid" src="img/banner/text-img.png" alt="">
-						<p>If you are looking at blank cassettes on the web, you may be very confused at the difference in price You may see some
-							for as low as each.</p>
-						<a class="main_btn mr-10" href="#">donate now</a>
-						<a class="white_bg_btn" href="#">view activity</a>
+						<p>Spare some change and make the change for the people in Lebanon</p>
+						<a class="main_btn mr-10" href="causes.php">donate now</a>
+						<a class="white_bg_btn" href="dashboard/">Create Cause</a>
 					</div>
 				</div>
 			</div>
@@ -118,7 +58,7 @@
 	<section class="donation_details pad_top">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-3 col-md-6 single_donation_box">
+				<!-- <div class="col-lg-3 col-md-6 single_donation_box">
 					<img src="img/icons/home1.png" alt="">
 					<h4>Total Donation</h4>
 					<p>
@@ -131,20 +71,16 @@
 					<p>
 						The French Revolutioncons tituted for the conscience of the dominant.
 					</p>
-				</div>
+				</div> -->
 				<div class="col-lg-3 col-md-6 single_donation_box">
 					<img src="img/icons/home3.png" alt="">
-					<h4>Highest Donation</h4>
-					<p>
-						The French Revolutioncons tituted for the conscience of the dominant.
-					</p>
+					<h4>Reconstruct</h4>
+					<p>Help out Lebanese people keep their houses</p>
 				</div>
 				<div class="col-lg-3 col-md-6 single_donation_box">
 					<img src="img/icons/home4.png" alt="">
-					<h4>Total Donation</h4>
-					<p>
-						The French Revolutioncons tituted for the conscience of the dominant.
-					</p>
+					<h4>Be Awarded</h4>
+					<p>Companies that donate money or resources will be advertised</p>
 				</div>
 			</div>
 		</div>
@@ -158,278 +94,67 @@
 				<div class="col-lg-12">
 					<h1>Our Major Causes</h1>
 					<p>
-						The French Revolution constituted for the conscience of the dominant aristocratic class a fall from innocence the natural
-						chain of events.
+
 					</p>
 				</div>
 			</div>
 
 			<div class="row">
 				<div id="our-major-cause" class="owl-carousel">
-					<div class="card">
-						<div class="card-body">
-							<figure>
-								<img class="card-img-top img-fluid" src="img/donation/d1.jpg" alt="Card image cap">
-							</figure>
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: 76%;">
-									<span>Funded 76%</span>
-								</div>
-							</div>
-							<div class="card_inner_body">
-								<div class="card-body-top">
-									<span>Raised: $7,689</span> / $10,000
-								</div>
-								<h4 class="card-title">Did not find your Package</h4>
-								<p class="card-text">inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards especially
-									in the workplace that’s why it’s crucial.
-								</p>
-								<a href="#" class="main_btn2">donate here</a>
-							</div>
-						</div>
-					</div>
+          <?php
+  				while($rows=mysqli_fetch_assoc($getAllProjects)){
+  					$img=$rows['thumbnail'];
+  					$percentage=$rows['percentage'];
+  					$goal=$rows['goal'];
+  					$title=$rows['title'];
+  					$smallDescription=$rows['smallDescription'];
+  					$id=$rows['id'];
+  					$dateAdded=date('j-M-y',strtotime($rows['dateAdded']));
+  					$getAllDonations=mysqli_query($con,"SELECT SUM(donationAmount) from donations where causeID='$id' ");
+  					$donationDetails=mysqli_fetch_assoc($getAllDonations);
+  					$totalRaised=$donationDetails['SUM(donationAmount)'];
+  					if($totalRaised==""){
+  						$totalRaised=0;
+  					}
 
-					<div class="card">
-						<div class="card-body">
-							<figure>
-								<img class="card-img-top img-fluid" src="img/donation/d2.jpg" alt="Card image cap">
-							</figure>
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: 76%;">
-									<span>Funded 76%</span>
-								</div>
-							</div>
-							<div class="card_inner_body">
-								<div class="card-body-top">
-									<span>Raised: $7,689</span> / $10,000
-								</div>
-								<h4 class="card-title">Did not find your Package</h4>
-								<p class="card-text">inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards especially
-									in the workplace that’s why it’s crucial.
-								</p>
-								<a href="#" class="main_btn2">donate here</a>
-							</div>
-						</div>
-					</div>
 
-					<div class="card">
-						<div class="card-body">
-							<figure>
-								<img class="card-img-top img-fluid" src="img/donation/d3.jpg" alt="Card image cap">
-							</figure>
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: 76%;">
-									<span>Funded 76%</span>
-								</div>
-							</div>
-							<div class="card_inner_body">
-								<div class="card-body-top">
-									<span>Raised: $7,689</span> / $10,000
-								</div>
-								<h4 class="card-title">Did not find your Package</h4>
-								<p class="card-text">inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards especially
-									in the workplace that’s why it’s crucial.
-								</p>
-								<a href="#" class="main_btn2">donate here</a>
-							</div>
-						</div>
-					</div>
+  				echo '
+   					<div class="card">
+  						<div class="card-body">
+  							<figure>
+  								<img class="card-img-top img-fluid sheeshImg" src="'.$img.'" alt="'.$title.'">
+  							</figure>
+  							<div class="progress">
+  								<div class="progress-bar" role="progressbar" aria-valuenow="'.$percentage.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentage.'%;">
+  									<span>Funded '.$percentage.'%</span>
+  								</div>
+  							</div>
+  							<div class="card_inner_body">
+  								<div class="card-body-top">
+  									<span>Raised: €'.$totalRaised.'</span> / €'.$goal.'
+  								</div>
+  								<h4 class="card-title">'.$title.'</h4>
+  								<p class="card-text">'.$smallDescription.'
+  								</p>
+  								<a href="causeDetails.php?id='.$id.'" class="main_btn2">View More</a>
+  							</div>
+  							<p>
+  							Date Added: '.$dateAdded.'
+  							</p>
+  						</div>
+   				</div>';
 
-					<div class="card">
-						<div class="card-body">
-							<figure>
-								<img class="card-img-top img-fluid" src="img/donation/d2.jpg" alt="Card image cap">
-							</figure>
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: 76%;">
-									<span>Funded 76%</span>
-								</div>
-							</div>
-							<div class="card_inner_body">
-								<div class="card-body-top">
-									<span>Raised: $7,689</span> / $10,000
-								</div>
-								<h4 class="card-title">Did not find your Package</h4>
-								<p class="card-text">inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards especially
-									in the workplace that’s why it’s crucial.
-								</p>
-								<a href="#" class="main_btn2">donate here</a>
-							</div>
-						</div>
-					</div>
+  			}
 
-					<div class="card">
-						<div class="card-body">
-							<figure>
-								<img class="card-img-top img-fluid" src="img/donation/d3.jpg" alt="Card image cap">
-							</figure>
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: 76%;">
-									<span>Funded 76%</span>
-								</div>
-							</div>
-							<div class="card_inner_body">
-								<div class="card-body-top">
-									<span>Raised: $7,689</span> / $10,000
-								</div>
-								<h4 class="card-title">Did not find your Package</h4>
-								<p class="card-text">inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards especially
-									in the workplace that’s why it’s crucial.
-								</p>
-								<a href="#" class="main_btn2">donate here</a>
-							</div>
-						</div>
-					</div>
-
-					<div class="card">
-						<div class="card-body">
-							<figure>
-								<img class="card-img-top img-fluid" src="img/donation/d1.jpg" alt="Card image cap">
-							</figure>
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: 76%;">
-									<span>Funded 76%</span>
-								</div>
-							</div>
-							<div class="card_inner_body">
-								<div class="card-body-top">
-									<span>Raised: $7,689</span> / $10,000
-								</div>
-								<h4 class="card-title">Did not find your Package</h4>
-								<p class="card-text">inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards especially
-									in the workplace that’s why it’s crucial.
-								</p>
-								<a href="#" class="main_btn2">donate here</a>
-							</div>
-						</div>
-					</div>
-
-					<div class="card">
-						<div class="card-body">
-							<figure>
-								<img class="card-img-top img-fluid" src="img/donation/d2.jpg" alt="Card image cap">
-							</figure>
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: 76%;">
-									<span>Funded 76%</span>
-								</div>
-							</div>
-							<div class="card_inner_body">
-								<div class="card-body-top">
-									<span>Raised: $7,689</span> / $10,000
-								</div>
-								<h4 class="card-title">Did not find your Package</h4>
-								<p class="card-text">inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards especially
-									in the workplace that’s why it’s crucial.
-								</p>
-								<a href="#" class="main_btn2">donate here</a>
-							</div>
-						</div>
-					</div>
-				</div>
+  				?>
 			</div>
 		</div>
+  </div>
 	</section>
 	<!--================ Ens Our Major Cause section =================-->
 
 	<!--================ Start Make Donation Area =================-->
-	<section class="make_donation section_gap">
-		<div class="container">
-			<div class="row justify-content-start section-title-wrap">
-				<div class="col-lg-12">
-					<h1>Make a Donation Today</h1>
-					<p>
-						Las Vegas has more than 100,000 hotel rooms to choose from. There is something for every budget, and enough.
-					</p>
-				</div>
-			</div>
 
-			<div class="donate_now_wrapper">
-				<form>
-					<div class="row">
-						<div class="col-lg-4">
-							<div class="donate_box mb-30">
-								<div class="form-check">
-									<input type="radio" class="form-check-input" name="donation" id="ten_doller">
-									<label class="form-check-label d-flex justify-content-between" for="ten_doller">
-										<div class="label_text">
-											$10.00
-										</div>
-										<div class="label_text">
-											USD
-										</div>
-									</label>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<div class="donate_box mb-30">
-								<div class="form-check">
-									<input type="radio" class="form-check-input" name="donation" id="fifty_doller">
-									<label class="form-check-label d-flex justify-content-between" for="fifty_doller">
-										<div class="label_text">
-											$50.00
-										</div>
-										<div class="label_text">
-											USD
-										</div>
-									</label>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<div class="donate_box mb-30">
-								<div class="form-check">
-									<input type="radio" class="form-check-input" name="donation" id="hundred_doller">
-									<label class="form-check-label d-flex justify-content-between" for="hundred_doller">
-										<div class="label_text">
-											$100.00
-										</div>
-										<div class="label_text">
-											USD
-										</div>
-									</label>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<div class="donate_box">
-								<div class="form-check">
-									<input type="radio" class="form-check-input" name="donation" id="two_fifty__doller">
-									<label class="form-check-label d-flex justify-content-between" for="two_fifty__doller">
-										<div class="label_text">
-											$250.00
-										</div>
-										<div class="label_text">
-											USD
-										</div>
-									</label>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<div class="donate_box">
-								<div class="form-group">
-									<input type="text" placeholder="Others" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Others'" class="form-control">
-									<span class="fs-14">USD</span>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<div class="donate_box">
-								<button type="submit" class="main_btn w-100">donate now</button>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</section>
 	<!--================ End Make Donation Area =================-->
 
 	<!--================ Start Clients Logo Area =================-->
@@ -461,140 +186,55 @@
 		<div class="container">
 			<div class="row justify-content-center section-title-wrap">
 				<div class="col-lg-12">
-					<h1>Support a campaign or fundraiser</h1>
+					<h1>Top Donors</h1>
 					<p>
-						The French Revolution constituted for the conscience of the dominant aristocratic class a fall from innocence the natural
-						chain of events.
+
 					</p>
 				</div>
 			</div>
-
-			<div class="row">
-				<div class="col-lg-6 mb-30">
-					<div class="campaign_box">
-						<div class="camppaign d-flex">
-							<div class="img-box">
-								<img class="img-fluid" src="img/donation/sc1.jpg" alt="">
-							</div>
-
-							<div>
-								<h4>Help for cancer victims</h4>
-								<h4>USD 22,563</h4>
-							</div>
-						</div>
-
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: 76%;">
-								<span>Funded 76%</span>
-							</div>
-						</div>
-					</div>
-				</div>
+	<div class="row">
+			<?php
+			while($donnor=mysqli_fetch_assoc($getTopDonnors)){
+				$name= $donnor['name'];
+				$id=$donnor['id'];
+				$icon=$donnor['icon'];
+			 ?>
 
 				<div class="col-lg-6 mb-30">
 					<div class="campaign_box">
 						<div class="camppaign d-flex">
 							<div class="img-box">
-								<img class="img-fluid" src="img/donation/sc1.jpg" alt="">
+								<?php
+					echo '<a href="viewProfile.php?user='.$id.'"><img class="img-fluid icon" src="'.$icon.'" alt=""></a>';
+						?>
 							</div>
 
 							<div>
-								<h4>Help for cancer victims</h4>
-								<h4>USD 22,563</h4>
+								<?php
+							echo'	<h4><a href="viewProfile.php?user='.$id.'">'.$name.'</a></h4>';
+								?>
+								<h4>EUR <?php echo $donnor['totalDonated'];?></h4>
 							</div>
 						</div>
 
-						<div class="progress">
+						<!-- <div class="progress">
 							<div class="progress-bar" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: 76%;">
 								<span>Funded 76%</span>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 
-				<div class="col-lg-6 mb-30">
-					<div class="campaign_box">
-						<div class="camppaign d-flex">
-							<div class="img-box">
-								<img class="img-fluid" src="img/donation/sc1.jpg" alt="">
-							</div>
+			 <?php
+		 }
+			  ?>
 
-							<div>
-								<h4>Help for cancer victims</h4>
-								<h4>USD 22,563</h4>
-							</div>
-						</div>
 
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: 76%;">
-								<span>Funded 76%</span>
-							</div>
-						</div>
-					</div>
-				</div>
 
-				<div class="col-lg-6 mb-30">
-					<div class="campaign_box">
-						<div class="camppaign d-flex">
-							<div class="img-box">
-								<img class="img-fluid" src="img/donation/sc1.jpg" alt="">
-							</div>
 
-							<div>
-								<h4>Help for cancer victims</h4>
-								<h4>USD 22,563</h4>
-							</div>
-						</div>
 
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: 76%;">
-								<span>Funded 76%</span>
-							</div>
-						</div>
-					</div>
-				</div>
 
-				<div class="col-lg-6">
-					<div class="campaign_box">
-						<div class="camppaign d-flex">
-							<div class="img-box">
-								<img class="img-fluid" src="img/donation/sc1.jpg" alt="">
-							</div>
 
-							<div>
-								<h4>Help for cancer victims</h4>
-								<h4>USD 22,563</h4>
-							</div>
-						</div>
-
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: 76%;">
-								<span>Funded 76%</span>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-lg-6">
-					<div class="campaign_box">
-						<div class="camppaign d-flex">
-							<div class="img-box">
-								<img class="img-fluid" src="img/donation/sc1.jpg" alt="">
-							</div>
-
-							<div>
-								<h4>Help for cancer victims</h4>
-								<h4>USD 22,563</h4>
-							</div>
-						</div>
-
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: 76%;">
-								<span>Funded 76%</span>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 		</div>
 	</section>
@@ -605,11 +245,10 @@
 		<div class="container">
 			<div class="row align-items-center justify-content-center">
 				<div class="col-lg-12">
-					<h1>Experience How your Donation Can Reach</h1>
-					<p>he French Revolution constituted for the conscience of the dominant aristocratic class a fall from innocence, and upturning
-						of the natural chain of events that resounded.</p>
-					<a href="#" class="main_btn2 mr-10">make donation now</a>
-					<a href="#" class="main_btn2">Create Fundraising today</a>
+					<h1>Spare some change and make the change</h1>
+					<p></p>
+					<a href="causes.php" class="main_btn2 mr-10">make donation now</a>
+					<a href="dashboard/" class="main_btn2">Create Cause today</a>
 				</div>
 			</div>
 		</div>
@@ -617,68 +256,8 @@
 	<!--================ End Experience Area =================-->
 
 	<!--================ Start Footer Area  =================-->
-	<footer class="footer-area section_gap">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-5  col-md-6 col-sm-6">
-					<div class="single-footer-widget">
-						<h6 class="footer_title">About Me</h6>
-						<p>
-							Do you want to be even more successful? Learn to love learning and growth. The more effort you put into improving your skills,
-						</p>
-					</div>
-				</div>
-				<div class="col-lg-5 col-md-6 col-sm-6">
-					<div class="single-footer-widget">
-						<h6 class="footer_title">Newsletter</h6>
-						<p>Stay updated with our latest trends</p>
-						<div id="mc_embed_signup">
-							<form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-							 method="get" class="subscribe_form relative">
-								<div class="input-group d-flex flex-row">
-									<input name="EMAIL" placeholder="Enter Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address '"
-									 required="" type="email">
-									<button class="btn sub-btn">
-										<span class="lnr lnr-arrow-right"></span>
-									</button>
-								</div>
-								<div class="mt-10 info"></div>
-							</form>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-2 col-md-6 col-sm-6">
-					<div class="single-footer-widget f_social_wd">
-						<h6 class="footer_title">Follow Us</h6>
-						<p>Let us be social</p>
-						<div class="f_social">
-							<a href="#">
-								<i class="fa fa-facebook"></i>
-							</a>
-							<a href="#">
-								<i class="fa fa-twitter"></i>
-							</a>
-							<a href="#">
-								<i class="fa fa-dribbble"></i>
-							</a>
-							<a href="#">
-								<i class="fa fa-behance"></i>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
+  <?php include 'footer.php';?>
 
-			<div class="row">
-				<div class="col-lg-12">
-					<p class="copyright"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-					</p>
-				</div>
-			</div>
-		</div>
-	</footer>
 	<!--================ End Footer Area  =================-->
 
 

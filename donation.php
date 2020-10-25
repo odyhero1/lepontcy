@@ -1,3 +1,53 @@
+<?php
+include 'db.php';
+include 'auth.php';
+
+if(isset($_GET['causeID'])){
+  $id=$_GET['causeID'];
+}else {
+  header('location: causes.php');
+}
+ $getProjectDetails=mysqli_query($con,"SELECT * from requests where id='$id'");
+if(mysqli_num_rows($getProjectDetails) ==0){
+  header('location: causes.php');
+}
+$projectDetails=mysqli_fetch_assoc($getProjectDetails);
+$img=$projectDetails['thumbnail'];
+$title=$projectDetails['title'];
+$smallDescription=nl2br($projectDetails['smallDescription']);
+$percentage=$projectDetails['percentage'];
+$goal=$projectDetails['goal'];
+$dateAdded=date('j-M-y',strtotime($projectDetails['dateAdded']));
+$location=$projectDetails['location'];
+
+
+
+if(isset($_POST['moneyDonation']) or isset($_POST['customMoneyDonation'])){
+
+  $amount=$_POST['moneyDonation'];
+
+$customAmount=$_POST['customMoneyDonation'];
+
+    if($amount!="" and $customAmount==""){
+      $nAmount=round($amount,2);
+      $_SESSION['cart']['causeID']=$id;
+      $_SESSION['cart']['amount']=$nAmount;
+      header('location: checkout.php');
+    }
+
+
+  if(is_numeric($customAmount) and $customAmount > 5){
+    $nAmount=round($customAmount,2);
+    $_SESSION['cart']['causeID']=$id;
+    $_SESSION['cart']['amount']=$nAmount;
+    header('location: checkout.php');
+  }else{
+    $msg="Donations must be greater than €5";
+  }
+}
+
+ ?>
+
 <!doctype html>
 <html lang="en">
 
@@ -6,7 +56,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" href="img/favicon.png" type="image/png">
-	<title>Donatoion</title>
+	<title>Help Lebanon Today</title>
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="vendors/linericon/style.css">
@@ -24,73 +74,8 @@
 <body>
 
 	<!--================Header Menu Area =================-->
-	<header class="header_area">
-		<div class="main_menu">
-			<nav class="navbar navbar-expand-lg navbar-light">
-				<div class="container">
-					<!-- Brand and toggle get grouped for better mobile display -->
-					<a class="navbar-brand logo_h" href="index.html">
-						<img src="img/logo.png" alt="">
-					</a>
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-					 aria-expanded="false" aria-label="Toggle navigation">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<!-- Collect the nav links, forms, and other content for toggling -->
-					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
-						<div class="row ml-0 w-100">
-							<div class="col-lg-12 pr-0">
-								<ul class="nav navbar-nav center_nav pull-right">
-									<li class="nav-item">
-										<a class="nav-link" href="index.html">home</a>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link" href="causes.html">causes</a>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link" href="events.html">events</a>
-									</li>
-									<li class="nav-item submenu dropdown active">
-										<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages</a>
-										<ul class="dropdown-menu">
-											<li class="nav-item">
-												<a class="nav-link" href="about.html">About</a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="donation.html">donation</a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="elements.html">Elements</a>
-											</li>
-										</ul>
-									</li>
-									<li class="nav-item submenu dropdown">
-										<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Blog</a>
-										<ul class="dropdown-menu">
-											<li class="nav-item">
-												<a class="nav-link" href="blog.html">Blog</a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="single-blog.html">Blog Details</a>
-											</li>
-										</ul>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link" href="contact.html">Contact</a>
-									</li>
-									<li class="nav-item">
-										<a class="main_btn" href="donation.html">donate now</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</nav>
-		</div>
-	</header>
+	<?php include 'navbar.php';?>
+
 	<!--================Header Menu Area =================-->
 
 	<!--================ Banner Area =================-->
@@ -115,26 +100,26 @@
 		<div class="container">
 			<div class="row justify-content-start section-title-wrap">
 				<div class="col-lg-12">
-					<h1>Make a Donation Today</h1>
+					<h1>Make a donation to <?php echo "<a class='niceColor' href='causeDetails.php?id=".$id."'>".$title."</a>";?> </h1>
 					<p>
-						Las Vegas has more than 100,000 hotel rooms to choose from. There is something for every budget, and enough.
+						<?php echo $smallDescription;?>
 					</p>
 				</div>
 			</div>
 
 			<div class="donate_now_wrapper">
-				<form>
+				<form method="post">
 					<div class="row">
 						<div class="col-lg-4">
 							<div class="donate_box mb-30">
 								<div class="form-check">
-									<input type="radio" class="form-check-input" name="donation" id="ten_doller">
+									<input type="radio" class="form-check-input" name="moneyDonation" value='10' id="ten_doller">
 									<label class="form-check-label d-flex justify-content-between" for="ten_doller">
 										<div class="label_text">
-											$10.00
+											€10.00
 										</div>
 										<div class="label_text">
-											USD
+											EUR
 										</div>
 									</label>
 								</div>
@@ -144,13 +129,13 @@
 						<div class="col-lg-4">
 							<div class="donate_box mb-30">
 								<div class="form-check">
-									<input type="radio" class="form-check-input" name="donation" id="fifty_doller">
+									<input type="radio" class="form-check-input" name="moneyDonation" value='50' id="fifty_doller">
 									<label class="form-check-label d-flex justify-content-between" for="fifty_doller">
 										<div class="label_text">
-											$50.00
+											€50.00
 										</div>
 										<div class="label_text">
-											USD
+											EUR
 										</div>
 									</label>
 								</div>
@@ -160,13 +145,13 @@
 						<div class="col-lg-4">
 							<div class="donate_box mb-30">
 								<div class="form-check">
-									<input type="radio" class="form-check-input" name="donation" id="hundred_doller">
+									<input type="radio" class="form-check-input" name="moneyDonation" value='100' id="hundred_doller">
 									<label class="form-check-label d-flex justify-content-between" for="hundred_doller">
 										<div class="label_text">
-											$100.00
+											€100.00
 										</div>
 										<div class="label_text">
-											USD
+											EUR
 										</div>
 									</label>
 								</div>
@@ -176,13 +161,13 @@
 						<div class="col-lg-4">
 							<div class="donate_box">
 								<div class="form-check">
-									<input type="radio" class="form-check-input" name="donation" id="two_fifty__doller">
+									<input type="radio" class="form-check-input" name="moneyDonation" value='250' id="two_fifty__doller">
 									<label class="form-check-label d-flex justify-content-between" for="two_fifty__doller">
 										<div class="label_text">
-											$250.00
+											€250.00
 										</div>
 										<div class="label_text">
-											USD
+											EUR
 										</div>
 									</label>
 								</div>
@@ -192,8 +177,8 @@
 						<div class="col-lg-4">
 							<div class="donate_box">
 								<div class="form-group">
-									<input type="text" placeholder="Others" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Others'" class="form-control">
-									<span class="fs-14">USD</span>
+									<input type="number" placeholder="Other" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Other'"  name='customMoneyDonation' class="form-control">
+									<span class="fs-14">EUR</span>
 								</div>
 							</div>
 						</div>
@@ -205,74 +190,64 @@
 						</div>
 					</div>
 				</form>
+        <br />
+        <h3 style="text-align:center;">Or Create Quote For Materials</h3>
+        <br />
+        <!-- <form method="post">
+          <div class="row">
+            <label>Create Quote For</label>
+            <select class="single-input space" name="materialType">
+              <option>
+                Floor Tiles
+              </option>
+            </select>
+            <label>Is it a donation?</label>
+            <select class="single-input space" onchange="sheesh()" id='donation' name="donation">
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+            <label>Amount Of Materials</label>
+            <input class="single-input space" type="number" placeholder="Amount of materials" name='amountOfMaterials'/>
+            <label>Quote €</label>
+            <input class="single-input space" type="number" id='quote' placeholder="Total Quote in EUR" name='totalQuote' />
+            <label>Message</label>
+            <textarea class="single-input space" name='message' placeholder="Enter a message..."></textarea>
+            <input type='submit' class="main_btn2" value='Send Quote'/>
+
+        </div>
+        </form> -->
+        <p>
+          Sending quotes is currently under maintenance
+        </p>
+
+
 			</div>
 		</div>
 	</section>
+
+<script>
+function sheesh(){
+var getDonation=document.getElementById("donation");
+var donation=getDonation.options[getDonation.selectedIndex].value;
+if (donation=="Yes"){
+  document.getElementById('quote').value='';
+  document.getElementById('quote').disabled = true;
+  document.getElementById('quote').style.backgroundColor='#DCDAD1';
+ }else {
+   document.getElementById('quote').disabled = false;
+   document.getElementById('quote').style.backgroundColor='#f9f9ff';
+
+}
+}
+sheesh();
+
+</script>
+
 	<!--================ End Make Donation Area =================-->
 
 	<!--================ Start Footer Area  =================-->
-	<footer class="footer-area section_gap">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-5  col-md-6 col-sm-6">
-					<div class="single-footer-widget">
-						<h6 class="footer_title">About Me</h6>
-						<p>
-							Do you want to be even more successful? Learn to love learning and growth. The more effort you put into improving your skills,
-						</p>
-					</div>
-				</div>
-				<div class="col-lg-5 col-md-6 col-sm-6">
-					<div class="single-footer-widget">
-						<h6 class="footer_title">Newsletter</h6>
-						<p>Stay updated with our latest trends</p>
-						<div id="mc_embed_signup">
-							<form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-							 method="get" class="subscribe_form relative">
-								<div class="input-group d-flex flex-row">
-									<input name="EMAIL" placeholder="Enter Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address '"
-									 required="" type="email">
-									<button class="btn sub-btn">
-										<span class="lnr lnr-arrow-right"></span>
-									</button>
-								</div>
-								<div class="mt-10 info"></div>
-							</form>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-2 col-md-6 col-sm-6">
-					<div class="single-footer-widget f_social_wd">
-						<h6 class="footer_title">Follow Us</h6>
-						<p>Let us be social</p>
-						<div class="f_social">
-							<a href="#">
-								<i class="fa fa-facebook"></i>
-							</a>
-							<a href="#">
-								<i class="fa fa-twitter"></i>
-							</a>
-							<a href="#">
-								<i class="fa fa-dribbble"></i>
-							</a>
-							<a href="#">
-								<i class="fa fa-behance"></i>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
+  <?php include 'footer.php';?>
 
-			<div class="row">
-				<div class="col-lg-12">
-					<p class="copyright"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-					</p>
-				</div>
-			</div>
-		</div>
-	</footer>
 	<!--================ End Footer Area  =================-->
 
 
