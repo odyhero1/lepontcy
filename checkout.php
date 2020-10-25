@@ -1,7 +1,7 @@
 <?php
 include 'db.php';
 include 'auth.php';
-require 'vendor/autoload.php';
+// require 'vendor/autoload.php';
 
 if(isset($_SESSION['cart']['causeID']) and isset($_SESSION['cart']['causeID'])){
 
