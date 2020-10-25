@@ -52,10 +52,9 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <p class="copyright"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                <p class="copyright">
 Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | Lepontcy
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                </p>
+                 </p>
             </div>
         </div>
     </div>
