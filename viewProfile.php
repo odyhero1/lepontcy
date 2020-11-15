@@ -19,41 +19,56 @@ $totalDonated=$userDetails['totalDonated'];
 $location=$userDetails['country'];
 $rows=[];
 
-// $getDonations=mysqli_query($con,"SELECT donations.userID,requests.id,requests.title,requests.smallDescription,requests.thumbnail,requests.percentage,requests.goal,requests.location,requests.dateAdded from donations inner join requests on requests.id=donations.causeID where donations.userID='$id' order by donations.donationAmount desc ");
-// while($donation=mysqli_fetch_assoc($getDonations)){
-//   // var_dump($donation);
-//   $donationID=$donation['id'];
-//
-// if(empty($rows)){
-//   $rows[]['id']=$donation['id'];
-//   $rows[]['thumbnail']=$donation['thumbnail'];
-//   $rows[]['percentage']=$donation['percentage'];
-//   $rows[]['title']=$donation['title'];
-//   $rows[]['smallDescription']=$donation['smallDescription'];
-//   $rows[]['dateAdded']=$donation['dateAdded'];
-//   $rows[]['goal']=$donation['goal'];
-// } else {
-//
-//
-//   if(array_search($donationID,$rows['id'][0])!=NULL){
-//     echo 'sheesh';
-//     print(array_search($donationID,$rows['id']));
-//   }else {
-//   // $rows['id'][]=$donation['id'];
-//   // $rows['thumbnail'][]=$donation['thumbnail'];
-//   // $rows['percentage'][]=$donation['percentage'];
-//   // $rows['title'][]=$donation['title'];
-//   // $rows['smallDescription'][]=$donation['smallDescription'];
-//   // $rows['dateAdded'][]=$donation['dateAdded'];
-//   // $rows['goal'][]=$donation['goal'];
-// }
-// }
-//
-// var_dump($rows);
-// }
-// $count=count($rows);
-// print($count);
-?>
+$getDonations=mysqli_query($con,"SELECT donations.userID,requests.id,requests.title,requests.smallDescription,requests.thumbnail,requests.percentage,requests.goal,requests.location,requests.dateAdded from donations inner join requests on requests.id=donations.causeID where donations.userID='$id' order by donations.donationAmount desc ");
+while($donation=mysqli_fetch_assoc($getDonations)){
+  // var_dump($donation);
+  $donationID=$donation['id'];
+
+if(empty($rows)){
+
+  $rows['id'][]=$donation['id'];
+  $rows['thumbnail'][]=$donation['thumbnail'];
+  $rows['percentage'][]=$donation['percentage'];
+  $rows['title'][]=$donation['title'];
+  $rows['smallDescription'][]=$donation['smallDescription'];
+  $rows['dateAdded'][]=$donation['dateAdded'];
+  $rows['goal'][]=$donation['goal'];
+} else {
+
+$fuckoff=false;
+  $count=count($rows['id']);
+
+    for ($b=0;$b < $count;$b++){
+      if($rows['id'][$b]==$donationID){
+        $fuckoff[$donationID]=true;
+
+
+      }else {
+
+      }
+    }
+      if(!(isset($fuckoff[$donationID]))){
+
+        $rows['id'][]=$donation['id'];
+        $rows['thumbnail'][]=$donation['thumbnail'];
+        $rows['percentage'][]=$donation['percentage'];
+        $rows['title'][]=$donation['title'];
+        $rows['smallDescription'][]=$donation['smallDescription'];
+        $rows['dateAdded'][]=$donation['dateAdded'];
+        $rows['goal'][]=$donation['goal'];
+      }
+
+    }
+    // var_dump($fuckoff);
+
+
+
+
+
+ // var_dump($rows);
+}
+$count=count($rows['id']);
+ ?>
 <!doctype html>
 
 <html lang="en">
@@ -136,16 +151,16 @@ $rows=[];
 									<h3>'.$name.'</h3>
 									<p>'.$bio.'</p>
                   <h3>Top Donations</h3>';
-                  $getDonations=mysqli_query($con,"SELECT donations.userID,requests.id,requests.title,requests.smallDescription,requests.thumbnail,requests.percentage,requests.goal,requests.location,requests.dateAdded from donations inner join requests on requests.id=donations.causeID where donations.userID='$id' order by donations.donationAmount desc ");
+                  // $getDonations=mysqli_query($con,"SELECT donations.userID,requests.id,requests.title,requests.smallDescription,requests.thumbnail,requests.percentage,requests.goal,requests.location,requests.dateAdded from donations inner join requests on requests.id=donations.causeID where donations.userID='$id' order by donations.donationAmount desc ");
 
-                  while($rows=mysqli_fetch_assoc($getDonations)){
-                    $img=$rows['thumbnail'];
-                    $percentage=$rows['percentage'];
-                    $goal=$rows['goal'];
-                    $title=$rows['title'];
-                    $smallDescription=$rows['smallDescription'];
-                    $id=$rows['id'];
-                    $dateAdded=date('j-M-y',strtotime($rows['dateAdded']));
+                  for($x=0;$x < $count;$x++){
+                    $img=$rows['thumbnail'][$x];
+                    $percentage=$rows['percentage'][$x];
+                    $goal=$rows['goal'][$x];
+                    $title=$rows['title'][$x];
+                    $smallDescription=$rows['smallDescription'][$x];
+                    $id=$rows['id'][$x];
+                    $dateAdded=date('j-M-y',strtotime($rows['dateAdded'][$x]));
                     $getAllDonations=mysqli_query($con,"SELECT SUM(donationAmount) from donations where causeID='$id'  ");
                     $donationDetails=mysqli_fetch_assoc($getAllDonations);
                     $totalRaised=$donationDetails['SUM(donationAmount)'];
@@ -156,7 +171,7 @@ $rows=[];
 
 
                   echo '
-                  <div class="col-lg-4">
+                  <div class="">
                     <div class="card">
                       <div class="card-body">
                         <figure>
